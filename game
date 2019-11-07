@@ -1,0 +1,64 @@
+from tkinter import *
+import random
+
+qula=0
+
+x_speed=5
+y_speed=4
+
+root=Tk()
+
+c=Canvas(root,width=600,height=400,bg='green')
+
+dafa=c.create_rectangle(300,380,400,400,fill="blue")
+ball=c.create_oval(300,200,350,250,fill='purple')
+qula_text=c.create_text(550,50,font="Arial 20",text=qula)
+def move_right(event):
+    if c.coords(dafa)[2]<600:
+        c.move(dafa,10,0)
+def move_left(event):
+    if c.coords(dafa)[0]>0:
+        c.move(dafa,-10,0)
+
+def start(event):
+    main_move()
+def restart(event):
+    global ball
+    c.delete(ball)
+    
+root.bind("<d>",move_right)
+root.bind("<a>",move_left)
+root.bind("<Button-1>",start)
+root.bind("<r>",restart)
+def main_move():
+    global x_speed,y_speed,qula,ball
+    c.move(ball,x_speed,y_speed)
+    pos=c.coords(ball)
+    cord=c.coords(dafa)
+    if pos[0]<=0:
+        x_speed=-x_speed
+    elif pos[1]<=0:
+        y_speed=-y_speed
+    elif pos[2]>=600:
+        x_speed=-x_speed
+    if pos[3]>=cord[1]:
+        k=(pos[0]+pos[2])/2
+        if cord[0]<=k and cord[2]>=k:
+            y_speed=-y_speed
+            qula+=1
+        else:
+            c.delete(ball)
+            qula=0
+            ball=c.create_oval(300,200,350,250,fill='purple')
+            
+            
+  
+
+    c.itemconfig(qula_text,text=qula)
+    root.after(50,main_move)
+
+
+
+main_move()
+c.pack()
+root.mainloop()
